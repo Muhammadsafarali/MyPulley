@@ -13,11 +13,12 @@ import MapKit
 class PrimaryContentViewController: UIViewController {
 
     @IBOutlet var mapView: MKMapView!
+    @IBOutlet weak var controlsContainer: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        controlsContainer.layer.cornerRadius = 10.0
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -28,6 +29,7 @@ class PrimaryContentViewController: UIViewController {
 
     func configMapView() {
         mapView.mapType = MKMapType.standard
+        mapView.showsCompass = false
         
         // 2)
         let location = CLLocationCoordinate2D(latitude: 55.751244, longitude: 37.618423)

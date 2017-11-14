@@ -3,8 +3,10 @@ import Pulley
 
 class DrawerContentViewController: UIViewController {
 
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var gripperView: UIView!
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet var gripperView: UIView!
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
     
@@ -47,6 +49,19 @@ extension DrawerContentViewController: PulleyDrawerViewControllerDelegate {
         }
         
         tableView.isScrollEnabled = drawer.drawerPosition == .open
+        
+        if drawer.drawerPosition != .open {
+            searchBar.resignFirstResponder()
+        }
+    }
+}
+
+extension DrawerContentViewController: UISearchBarDelegate {
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        if let drawerVC = self.parent as? PulleyViewController {
+            drawerVC.setDrawerPosition(position: .open, animated: true)
+        }
     }
 }
 
