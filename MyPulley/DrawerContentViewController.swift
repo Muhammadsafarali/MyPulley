@@ -1,11 +1,3 @@
-//
-//  DrawerContentViewController.swift
-//  MyPulley
-//
-//  Created by Елена Озерова on 13/11/2017.
-//  Copyright © 2017 Елена Озерова. All rights reserved.
-//
-
 import UIKit
 import Pulley
 
@@ -33,7 +25,7 @@ class DrawerContentViewController: UIViewController {
 
 extension DrawerContentViewController: PulleyDrawerViewControllerDelegate {
     func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
-        return 17.0 + bottomSafeArea
+        return 68.0 + bottomSafeArea
     }
     
     func partialRevealDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
@@ -49,9 +41,9 @@ extension DrawerContentViewController: PulleyDrawerViewControllerDelegate {
         drawerBottomSaveArea = bottomSafeArea
         
         if drawer.drawerPosition == .collapsed {
-            headerSectionHeightConstraint.constant = 17.0 + drawerBottomSaveArea
+            headerSectionHeightConstraint.constant = 68.0 + drawerBottomSaveArea
         } else {
-            headerSectionHeightConstraint.constant = 17.0
+            headerSectionHeightConstraint.constant = 68.0
         }
         
         tableView.isScrollEnabled = drawer.drawerPosition == .open

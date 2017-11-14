@@ -16,13 +16,34 @@ class PrimaryContentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        configMapView()
     }
 
+    func configMapView() {
+        mapView.mapType = MKMapType.standard
+        
+        // 2)
+        let location = CLLocationCoordinate2D(latitude: 55.751244, longitude: 37.618423)
+        
+        // 3)
+        let span = MKCoordinateSpanMake(0.05, 0.05)
+        let region = MKCoordinateRegion(center: location, span: span)
+        mapView.setRegion(region, animated: true)
+        
+        // 4)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = location
+        annotation.title = "WorldClass Metropolis"
+        annotation.subtitle = "3D-Dubllik"
+        mapView.addAnnotation(annotation)
+    }
 
 }
 
