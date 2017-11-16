@@ -1,7 +1,8 @@
 import UIKit
 import Pulley
+import SwiftyJSON
 
-class DrawerContentViewController: UIViewController {
+class DrawerContentViewController: UIViewController, UITableViewDataSource {
 
     @IBOutlet var tableView: UITableView!
     @IBOutlet var gripperView: UIView!
@@ -9,6 +10,9 @@ class DrawerContentViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
+    var locations: [Locations] = []
+    
+    var json = "[ {\"name\":\"Ашан в Авиапарке\",\"address\":\"Москва, Ходынский бульвар, д. 4\",\"longitude\":\"37.533887\",\"latitude\":\"55.789629\"},{\"name\":\"Офис продаж Dubllik\",\"address\":\"Москва, Старопетровский проезд, д. 7А, стр. 25\",\"longitude\":\"37.500881\",\"latitude\":\"55.825558\"}]"
     
     fileprivate var drawerBottomSaveArea: CGFloat = 0.0 {
         didSet {
@@ -21,8 +25,46 @@ class DrawerContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.tableFooterView = UIView()
         gripperView.layer.cornerRadius = 2.5
+        getLocations()
     }
+    
+    func getLocations() {
+        do {
+            var encodeString: Data = json.data(using: String.Encoding.utf8)!
+            let address = try JSON(data: encodeString).arrayValue
+            if !address.isEmpty {
+                
+                for addr in address {
+                    locations.append(Locations(name: addr["name"].stringValue, address: addr["address"].stringValue, longitude: addr["longitude"].stringValue, latitude: addr["latitude"].stringValue))
+                }
+                tableView.reloadData()
+            }
+        } catch {
+            
+        }
+    }
+    
+    
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return locations.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SampleCell", for: indexPath)
+        cell.textLabel?.text = locations[indexPath.row].name
+        cell.detailTextLabel?.text = locations[indexPath.row].address
+        
+        return cell
+    }
+    
+    
 }
 
 extension DrawerContentViewController: PulleyDrawerViewControllerDelegate {
@@ -65,20 +107,20 @@ extension DrawerContentViewController: UISearchBarDelegate {
     }
 }
 
-extension DrawerContentViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 23
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: "SampleCell", for: indexPath)
-    }
-}
+//extension DrawerContentViewController: UITableViewDataSource {
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return 23
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        return tableView.dequeueReusableCell(withIdentifier: "SampleCell", for: indexPath)
+//    }
+//}
 
 extension DrawerContentViewController: UITableViewDelegate {
     
@@ -89,11 +131,16 @@ extension DrawerContentViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        print("Did select at row: \(indexPath.row)")
-//        if let drawer = self.parent as? PulleyViewController {
-//            let primaryContent = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: <#T##String#>)
+        let prime = self.storyboard?.instantiateViewController(withIdentifier: "PrimaryContentViewController") as! PrimaryContentViewController
+        
+        prime.showLocation(address: locations[indexPath.row])
+//        if prime != nil {
+//            if prime.mapView == nil {
+//                print("mapView is nil")
+//            }
 //        }
     }
+    
 }
 
 
