@@ -123,10 +123,11 @@ extension DrawerContentViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if let drawer = self.parent as? PulleyViewController {
-            print("drawer is not nil")
+//            print("drawer is not nil")
             let prime = self.storyboard?.instantiateViewController(withIdentifier: "PrimaryContentViewController") as! PrimaryContentViewController
             
-            prime.showLocation(address: locations, drawer: drawer)
+            prime.show()
+//            prime.showLocation(address: locations, drawer: drawer)
         }
         
         

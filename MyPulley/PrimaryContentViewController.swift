@@ -2,7 +2,7 @@ import UIKit
 import Pulley
 import MapKit
 
-class PrimaryContentViewController: UIViewController, MKMapViewDelegate {
+class PrimaryContentViewController: UIViewController {
 
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var controlsContainer: UIView!
@@ -96,7 +96,7 @@ class PrimaryContentViewController: UIViewController, MKMapViewDelegate {
             annotation.subtitle = addr.address
             mapView.addAnnotation(annotation)
             
-            annotations.append(annotation)
+//            annotations.append(annotation)
         }
 //        let utils = Utils()
         let encode: Data = NSKeyedArchiver.archivedData(withRootObject: mapView)
@@ -104,6 +104,38 @@ class PrimaryContentViewController: UIViewController, MKMapViewDelegate {
         
 //        let encodeData: Data = NSKeyedArchiver.archivedData(withRootObject: annotations)
 //        utils.writeObjectToUserDefaults(obj: encodeData, key: "annotations")
+    }
+    
+    func show() {
+        let temp = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PrimaryContentViewController") as UIViewController
+//        self.presentedViewController(temp, animated: true, completion: nil)
+        self.present(temp, animated: true, completion: nil)
+        if mapView == nil {
+            print("MapView is nil")
+        } else {
+            print("MapView is not nil")
+            
+            var name = "WorldClass Metropolis"
+            var addr = "3D-Dubllik"
+            var longitude = "55.751244"
+            var latitude = "37.618423"
+            
+            let location = CLLocationCoordinate2D(latitude: Double(longitude)!, longitude: Double(latitude)!)
+            
+            // 3)
+            let span = MKCoordinateSpanMake(0.05, 0.05)
+            let region = MKCoordinateRegion(center: location, span: span)
+            mapView.setRegion(region, animated: true)
+            
+            // 4)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = location
+            annotation.title = name
+            annotation.subtitle = addr
+            mapView.addAnnotation(annotation)
+            // https://stackoverflow.com/questions/35544221/accessing-my-mapview-var-from-another-function-mapview-nil
+        }
+        
     }
 
     func showLocation(address: [Locations], drawer: PulleyViewController) {
@@ -129,7 +161,7 @@ class PrimaryContentViewController: UIViewController, MKMapViewDelegate {
             self.annotations.append(annotation)
         }
         
-        self.mapView.selectAnnotation(annotations[0], animated: true)
+//        self.mapView.selectAnnotation(annotations[0], animated: true)
 //        self.reloadInputViews()
 
 //        for addr in address {
