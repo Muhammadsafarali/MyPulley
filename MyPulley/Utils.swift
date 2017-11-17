@@ -10,12 +10,8 @@ public class Utils {
     
     public func readObjectFromUserDefaults(key: String) -> Data? {
         let defaults = UserDefaults.standard
-        let obj = defaults.object(forKey: key) as! Data
-        if obj != nil {
-            return obj
-        }
-        
-        return nil
+        let obj = defaults.object(forKey: key) as? Data
+        return obj
     }
     
 }

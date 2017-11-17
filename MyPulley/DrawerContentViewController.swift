@@ -37,8 +37,13 @@ class DrawerContentViewController: UIViewController, UITableViewDataSource {
             if !address.isEmpty {
                 
                 for addr in address {
-                    locations.append(Locations(name: addr["name"].stringValue, address: addr["address"].stringValue, longitude: addr["longitude"].stringValue, latitude: addr["latitude"].stringValue))
+                    locations.append(Locations(addr["name"].stringValue, addr["address"].stringValue, addr["longitude"].stringValue, addr["latitude"].stringValue))
                 }
+                
+                let utils = Utils()
+                let encode: Data = NSKeyedArchiver.archivedData(withRootObject: locations)
+                utils.writeObjectToUserDefaults(obj: encode, key: "location")
+                
                 tableView.reloadData()
             }
         } catch {
@@ -107,20 +112,6 @@ extension DrawerContentViewController: UISearchBarDelegate {
     }
 }
 
-//extension DrawerContentViewController: UITableViewDataSource {
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 23
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        return tableView.dequeueReusableCell(withIdentifier: "SampleCell", for: indexPath)
-//    }
-//}
 
 extension DrawerContentViewController: UITableViewDelegate {
     
@@ -131,9 +122,14 @@ extension DrawerContentViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let prime = self.storyboard?.instantiateViewController(withIdentifier: "PrimaryContentViewController") as! PrimaryContentViewController
+        if let drawer = self.parent as? PulleyViewController {
+            print("drawer is not nil")
+            let prime = self.storyboard?.instantiateViewController(withIdentifier: "PrimaryContentViewController") as! PrimaryContentViewController
+            
+            prime.showLocation(address: locations, drawer: drawer)
+        }
         
-        prime.showLocation(address: locations[indexPath.row])
+        
 //        if prime != nil {
 //            if prime.mapView == nil {
 //                print("mapView is nil")
