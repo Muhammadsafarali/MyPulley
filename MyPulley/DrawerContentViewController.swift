@@ -123,27 +123,20 @@ extension DrawerContentViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if let drawer = self.parent as? PulleyViewController {
-//            print("drawer is not nil")
+            
+            // Получить ссылку на PrimaryContentViewController
             let prime = self.storyboard?.instantiateViewController(withIdentifier: "PrimaryContentViewController") as! PrimaryContentViewController
             
-//            prime.show()
-            
-            
+            // Сделать Update ViewController'a
             PrimaryContentViewController.selectedItem = indexPath.row
             drawer.setPrimaryContentViewController(controller: prime, animated: false)
             
+            // Если TableView открыт на весь экран, то перевести его в полуоткрытое состояние
             if drawer.drawerPosition == .open {
                 drawer.setDrawerPosition(position: PulleyPosition.partiallyRevealed)
             }
-//            prime.showLocation(address: locations, drawer: drawer)
         }
-        
-        
-//        if prime != nil {
-//            if prime.mapView == nil {
-//                print("mapView is nil")
-//            }
-//        }
+
     }
     
 }
