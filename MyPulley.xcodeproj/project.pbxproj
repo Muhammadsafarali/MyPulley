@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D12793E1FBD968600510056 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D12793F1FBD968600510056 /* SwiftyJSON.framework */; };
+		0D1279411FBDA15200510056 /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1279401FBDA15200510056 /* Locations.swift */; };
+		0D1279431FBDB1A500510056 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1279421FBDB1A500510056 /* Utils.swift */; };
 		0DBDC1C01FB9B87700FABE58 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBDC1BF1FB9B87700FABE58 /* AppDelegate.swift */; };
 		0DBDC1C21FB9B87700FABE58 /* PrimaryContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBDC1C11FB9B87700FABE58 /* PrimaryContentViewController.swift */; };
 		0DBDC1C51FB9B87700FABE58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0DBDC1C31FB9B87700FABE58 /* Main.storyboard */; };
@@ -18,6 +21,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D12793F1FBD968600510056 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D1279401FBDA15200510056 /* Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locations.swift; sourceTree = "<group>"; };
+		0D1279421FBDB1A500510056 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		0DBDC1BC1FB9B87700FABE58 /* MyPulley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyPulley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DBDC1BF1FB9B87700FABE58 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0DBDC1C11FB9B87700FABE58 /* PrimaryContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryContentViewController.swift; sourceTree = "<group>"; };
@@ -37,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D12793E1FBD968600510056 /* SwiftyJSON.framework in Frameworks */,
 				0DBDC1D11FB9B99A00FABE58 /* Pulley.framework in Frameworks */,
 				1ACD3167FA00C06C08BA2B45 /* Pods_MyPulley.framework in Frameworks */,
 			);
@@ -82,6 +89,8 @@
 				0DBDC1C81FB9B87700FABE58 /* LaunchScreen.storyboard */,
 				0DBDC1CB1FB9B87700FABE58 /* Info.plist */,
 				0DBDC1D31FB9BDFD00FABE58 /* DrawerContentViewController.swift */,
+				0D1279401FBDA15200510056 /* Locations.swift */,
+				0D1279421FBDB1A500510056 /* Utils.swift */,
 			);
 			path = MyPulley;
 			sourceTree = "<group>";
@@ -89,6 +98,7 @@
 		D8E28E8ED44333518DFF8DF8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D12793F1FBD968600510056 /* SwiftyJSON.framework */,
 				0DBDC1D21FB9B99A00FABE58 /* Pulley.framework */,
 				F424ECD7E5FB6074138BD896 /* Pods_MyPulley.framework */,
 			);
@@ -174,10 +184,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MyPulley/Pods-MyPulley-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Pulley/Pulley.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pulley.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -224,8 +236,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D1279431FBDB1A500510056 /* Utils.swift in Sources */,
 				0DBDC1C21FB9B87700FABE58 /* PrimaryContentViewController.swift in Sources */,
 				0DBDC1C01FB9B87700FABE58 /* AppDelegate.swift in Sources */,
+				0D1279411FBDA15200510056 /* Locations.swift in Sources */,
 				0DBDC1D41FB9BDFD00FABE58 /* DrawerContentViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
