@@ -127,7 +127,15 @@ extension DrawerContentViewController: UITableViewDelegate {
             let prime = self.storyboard?.instantiateViewController(withIdentifier: "PrimaryContentViewController") as! PrimaryContentViewController
             
 //            prime.show()
-            prime.showLocation(address: locations, drawer: drawer)
+            
+            
+            PrimaryContentViewController.selectedItem = indexPath.row
+            drawer.setPrimaryContentViewController(controller: prime, animated: false)
+            
+            if drawer.drawerPosition == .open {
+                drawer.setDrawerPosition(position: PulleyPosition.partiallyRevealed)
+            }
+//            prime.showLocation(address: locations, drawer: drawer)
         }
         
         

@@ -6,6 +6,7 @@ class PrimaryContentViewController: UIViewController {
 
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var controlsContainer: UIView!
+    public static var selectedItem = 0
     
     var annotations: [MKPointAnnotation] = []
     
@@ -66,6 +67,7 @@ class PrimaryContentViewController: UIViewController {
         let utils = Utils()
         let decode: Data? = utils.readObjectFromUserDefaults(key: "location")
         if decode != nil {
+            // передал из DrawerContentViewController
             address = NSKeyedUnarchiver.unarchiveObject(with: decode!) as! [Locations]
 
 
@@ -76,6 +78,7 @@ class PrimaryContentViewController: UIViewController {
 //                longitude = Double(address.longitude!)!
 //            }
         } else {
+            // по умолчанию
             address.append(Locations(name, addr, longitude, latitude))
         }
         
@@ -84,8 +87,8 @@ class PrimaryContentViewController: UIViewController {
             mapView.showsCompass = false
 
             // 2)
-            let location = CLLocationCoordinate2D(latitude: Double(addr.longitude!)!, longitude: Double(addr.latitude!)!)
-
+            var location = CLLocationCoordinate2D(latitude: Double(addr.longitude!)!, longitude: Double(addr.latitude!)!)
+            
             // 3)
             let span = MKCoordinateSpanMake(0.05, 0.05)
             let region = MKCoordinateRegion(center: location, span: span)
@@ -101,16 +104,20 @@ class PrimaryContentViewController: UIViewController {
             annotations.append(annotation)
         }
         
-        self.mapView.selectAnnotation(annotations[0], animated: true)
-        self.mapView.centerCoordinate = annotations[0].coordinate
+        // Выбрать location и annotation. (т.е. установка фокуса)
+        self.mapView.selectAnnotation(annotations[PrimaryContentViewController.selectedItem], animated: true)
+        self.mapView.centerCoordinate = annotations[PrimaryContentViewController.selectedItem].coordinate
+        
+        // Немного сместить центр карты выше, чтобы видно было location и annotation
+        var center: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: Double(address[PrimaryContentViewController.selectedItem].longitude!)!, longitude: Double(address[PrimaryContentViewController.selectedItem].latitude!)!)
+        center.latitude -= self.mapView.region.span.latitudeDelta * 0.20
+        self.mapView.setCenter(center, animated: false)
+        
 //        let utils = Utils()
         let encode: Data = NSKeyedArchiver.archivedData(withRootObject: mapView)
         utils.writeObjectToUserDefaults(obj: encode, key: "mapView")
-        
-//        let encodeData: Data = NSKeyedArchiver.archivedData(withRootObject: annotations)
-//        utils.writeObjectToUserDefaults(obj: encodeData, key: "annotations")
     }
-    
+/*
     func show() {
         let temp = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PrimaryContentViewController") as UIViewController
 //        self.presentedViewController(temp, animated: true, completion: nil)
@@ -142,7 +149,7 @@ class PrimaryContentViewController: UIViewController {
         }
         
     }
-
+*/
     func showLocation(address: [Locations], drawer: PulleyViewController) {
         
 //        print(address.name)
@@ -158,7 +165,7 @@ class PrimaryContentViewController: UIViewController {
 //        center.latitude -= self.mapView.region.span.latitudeDelta * 0.40
 //        self.mapView.setCenter(center, animated: true)
         
-        drawer.setPrimaryContentViewController(controller: self, animated: true)
+//        drawer.setPrimaryContentViewController(controller: self, animated: false)
 //        let decodeData: Data? = utils.readObjectFromUserDefaults(key: "location")
 //        let address = NSKeyedUnarchiver.unarchiveObject(with: decodeData!) as! [Locations]
 //        for addr in address {
