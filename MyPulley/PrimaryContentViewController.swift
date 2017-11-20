@@ -9,6 +9,7 @@ class PrimaryContentViewController: UIViewController {
     public static var selectedItem = 0
     
     var annotations: [MKPointAnnotation] = []
+    public var addresses: [Locations] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,10 +20,10 @@ class PrimaryContentViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let drawer = self.parent as? PulleyViewController
-        {
-            drawer.drawerBackgroundVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-        }
+//        if let drawer = self.parent as? PulleyViewController
+//        {
+//            drawer.drawerBackgroundVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+//        }
 
         configMapView()
     }
@@ -34,24 +35,17 @@ class PrimaryContentViewController: UIViewController {
         var longitude = "37.500881"
         var latitude = "55.825558"
         
-        var address: [Locations] = []
-        
-        let utils = Utils()
-        let decode: Data? = utils.readObjectFromUserDefaults(key: "location")
-        if decode != nil {
-            // Передал список адресов из DrawerContentViewController
-            address = NSKeyedUnarchiver.unarchiveObject(with: decode!) as! [Locations]
-        } else {
-            // По умолчанию
-            address.append(Locations(name, addr, longitude, latitude))
+
+        if addresses.count == 0 {
+            addresses.append(Locations(name, addr, longitude, latitude))
         }
         
-        for addr in address {
+        for addr in addresses {
             mapView.mapType = MKMapType.standard
             mapView.showsCompass = false
 
             // 2)
-            var location = CLLocationCoordinate2D(latitude: Double(addr.longitude!)!, longitude: Double(addr.latitude!)!)
+            var location = CLLocationCoordinate2D(latitude: Double(addr.latitude!)!, longitude: Double(addr.longitude!)!)
             
             // 3)
             let span = MKCoordinateSpanMake(0.05, 0.05)
@@ -73,12 +67,9 @@ class PrimaryContentViewController: UIViewController {
         self.mapView.centerCoordinate = annotations[PrimaryContentViewController.selectedItem].coordinate
         
         // Немного сместить центр карты выше, чтобы видно было location и annotation
-        var center: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: Double(address[PrimaryContentViewController.selectedItem].longitude!)!, longitude: Double(address[PrimaryContentViewController.selectedItem].latitude!)!)
+        var center: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: Double(addresses[PrimaryContentViewController.selectedItem].latitude!)!, longitude: Double(addresses[PrimaryContentViewController.selectedItem].longitude!)!)
         center.latitude -= self.mapView.region.span.latitudeDelta * 0.20
         self.mapView.setCenter(center, animated: false)
-        
-        let encode: Data = NSKeyedArchiver.archivedData(withRootObject: mapView)
-        utils.writeObjectToUserDefaults(obj: encode, key: "mapView")
     }
     
 }

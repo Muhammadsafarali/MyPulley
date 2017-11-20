@@ -11,6 +11,8 @@ class DrawerContentViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
     var locations: [Locations] = []
+    var filter: [Locations] = []
+    var isSearch: Bool = false
     
     var json = "[ {\"name\":\"Ашан в Авиапарке\",\"address\":\"Москва, Ходынский бульвар, д. 4\",\"longitude\":\"37.533887\",\"latitude\":\"55.789629\"},{\"name\":\"Офис продаж Dubllik\",\"address\":\"Москва, Старопетровский проезд, д. 7А, стр. 25\",\"longitude\":\"37.500881\",\"latitude\":\"55.825558\"}]"
     
@@ -40,9 +42,15 @@ class DrawerContentViewController: UIViewController, UITableViewDataSource {
                     locations.append(Locations(addr["name"].stringValue, addr["address"].stringValue, addr["longitude"].stringValue, addr["latitude"].stringValue))
                 }
                 
-                let utils = Utils()
-                let encode: Data = NSKeyedArchiver.archivedData(withRootObject: locations)
-                utils.writeObjectToUserDefaults(obj: encode, key: "location")
+
+                // Удалить старые объекты
+//                let usrDef = UserDefaults()
+//                usrDef.removeObject(forKey: "location")
+//                usrDef.removeObject(forKey: "mapView")
+                
+//                let utils = Utils()
+//                let encode: Data = NSKeyedArchiver.archivedData(withRootObject: locations)
+//                utils.writeObjectToUserDefaults(obj: encode, key: "location")
                 
                 tableView.reloadData()
             }
@@ -58,13 +66,23 @@ class DrawerContentViewController: UIViewController, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locations.count
+        if !isSearch {
+            return locations.count
+        } else {
+            return filter.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SampleCell", for: indexPath)
-        cell.textLabel?.text = locations[indexPath.row].name
-        cell.detailTextLabel?.text = locations[indexPath.row].address
+        
+        if !isSearch {
+            cell.textLabel?.text = locations[indexPath.row].name
+            cell.detailTextLabel?.text = locations[indexPath.row].address
+        } else {
+            cell.textLabel?.text = filter[indexPath.row].name
+            cell.detailTextLabel?.text = filter[indexPath.row].address
+        }
         
         return cell
     }
@@ -110,6 +128,19 @@ extension DrawerContentViewController: UISearchBarDelegate {
             drawerVC.setDrawerPosition(position: .open, animated: true)
         }
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        isSearch = true
+        filter = searchText.isEmpty ? locations : locations.filter { (item: Locations) -> Bool in
+            return (item.address?.lowercased().contains((searchBar.text?.lowercased())!))!
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        isSearch = false
+    }
+    
 }
 
 
@@ -127,8 +158,14 @@ extension DrawerContentViewController: UITableViewDelegate {
             // Получить ссылку на PrimaryContentViewController
             let prime = self.storyboard?.instantiateViewController(withIdentifier: "PrimaryContentViewController") as! PrimaryContentViewController
             
+            // Использовать исходный список адресов либо отфильтрованный
+            if !isSearch {
+                prime.addresses = locations
+            } else {
+                prime.addresses = filter
+            }
+            
             // Сделать Update ViewController'a
-            PrimaryContentViewController.selectedItem = indexPath.row
             drawer.setPrimaryContentViewController(controller: prime, animated: false)
             
             // Если TableView открыт на весь экран, то перевести его в полуоткрытое состояние
