@@ -126,8 +126,8 @@ extension DrawerContentViewController: UITableViewDelegate {
 //            print("drawer is not nil")
             let prime = self.storyboard?.instantiateViewController(withIdentifier: "PrimaryContentViewController") as! PrimaryContentViewController
             
-            prime.show()
-//            prime.showLocation(address: locations, drawer: drawer)
+//            prime.show()
+            prime.showLocation(address: locations, drawer: drawer)
         }
         
         

@@ -28,6 +28,8 @@ class PrimaryContentViewController: UIViewController {
 //        let decode: Data = utils.readObjectFromUserDefaults(key: "mapView")!
 //        let address: [Locations] = NSKeyedUnarchiver.unarchiveObject(with: decode) as! [Locations]
         configMapView()
+        
+        print("viewWillAppear")
     }
     
     func mapViewWillStartRenderingMap(_ mapView: MKMapView) {
@@ -96,8 +98,11 @@ class PrimaryContentViewController: UIViewController {
             annotation.subtitle = addr.address
             mapView.addAnnotation(annotation)
             
-//            annotations.append(annotation)
+            annotations.append(annotation)
         }
+        
+        self.mapView.selectAnnotation(annotations[0], animated: true)
+        self.mapView.centerCoordinate = annotations[0].coordinate
 //        let utils = Utils()
         let encode: Data = NSKeyedArchiver.archivedData(withRootObject: mapView)
         utils.writeObjectToUserDefaults(obj: encode, key: "mapView")
@@ -142,24 +147,29 @@ class PrimaryContentViewController: UIViewController {
         
 //        print(address.name)
         
-        let utils = Utils()
-        let decode: Data = utils.readObjectFromUserDefaults(key: "mapView")!
-        self.mapView = NSKeyedUnarchiver.unarchiveObject(with: decode) as! MKMapView
+//        let utils = Utils()
+//        let decode: Data = utils.readObjectFromUserDefaults(key: "mapView")!
+//        self.mapView = NSKeyedUnarchiver.unarchiveObject(with: decode) as! MKMapView
         
 //        let decodeData: Data = utils.readObjectFromUserDefaults(key: "annotations")!
 //        self.annotations = NSKeyedUnarchiver.unarchiveObject(with: decodeData) as! [MKPointAnnotation]
         
-        let decodeData: Data? = utils.readObjectFromUserDefaults(key: "location")
-        let address = NSKeyedUnarchiver.unarchiveObject(with: decodeData!) as! [Locations]
-        for addr in address {
-            let location = CLLocationCoordinate2D(latitude: Double(addr.longitude!)!, longitude: Double(addr.latitude!)!)
-
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = location
-            annotation.title = addr.name
-            annotation.subtitle = addr.address
-            self.annotations.append(annotation)
-        }
+//        var center: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: Double(address[1].longitude!)!, longitude: Double(address[1].latitude!)!)
+//        center.latitude -= self.mapView.region.span.latitudeDelta * 0.40
+//        self.mapView.setCenter(center, animated: true)
+        
+        drawer.setPrimaryContentViewController(controller: self, animated: true)
+//        let decodeData: Data? = utils.readObjectFromUserDefaults(key: "location")
+//        let address = NSKeyedUnarchiver.unarchiveObject(with: decodeData!) as! [Locations]
+//        for addr in address {
+//            let location = CLLocationCoordinate2D(latitude: Double(addr.longitude!)!, longitude: Double(addr.latitude!)!)
+//
+//            let annotation = MKPointAnnotation()
+//            annotation.coordinate = location
+//            annotation.title = addr.name
+//            annotation.subtitle = addr.address
+//            self.annotations.append(annotation)
+//        }
         
 //        self.mapView.selectAnnotation(annotations[0], animated: true)
 //        self.reloadInputViews()
